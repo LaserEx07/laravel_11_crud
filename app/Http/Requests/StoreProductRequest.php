@@ -13,17 +13,17 @@ class StoreProductRequest extends FormRequest
  /**
  * Get the validation rules that apply to the request.
  *
- * @return array<string, 
-\Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+ * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
  */
  public function rules(): array
  {
  return [
- 'code' => 'required|string|max:50|unique:products,code',
- 'name' => 'required|string|max:250',
- 'quantity' => 'required|integer|min:1|max:10000',
- 'price' => 'required',
- 'description' => 'nullable|string'
+ 'code' => 'required|string|max:50',
+ 'name' => 'required|string|max:100',
+ 'quantity' => 'required|integer|min:0',
+ 'price' => 'required|numeric|min:0',
+ 'description' => 'required|string',
+ 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
  ];
  }
 }
