@@ -8,7 +8,7 @@
  Product Information
  </div>
  <div class="float-end">
- <a href="{{ route('products.index') }}" class="btn 
+ <a href="{{ route('products.index') }}" class="btn
 btn-primary btn-sm">&larr; Back</a>
  </div>
  </div>
@@ -48,10 +48,22 @@ btn-primary btn-sm">&larr; Back</a>
  {{ $product->description }}
  </div>
  </div>
- 
+
+ <div class="row">
+ <label for="picture" class="col-md-4 colform-label text-md-end textstart"><strong>Picture:</strong></label>
+ <div class="col-md-6" style="line-height:
+35px;">
+ @if($product->picture)
+ <img src="{{ asset('storage/'.$product->picture) }}" alt="{{ $product->name }}" class="img-fluid img-thumbnail" style="max-height: 200px;">
+ @else
+ No image available
+ @endif
  </div>
  </div>
- </div> 
+
+ </div>
+ </div>
+ </div>
 </div>
- 
+
 @endsection

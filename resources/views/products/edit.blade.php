@@ -13,23 +13,23 @@
  Edit Product
  </div>
  <div class="float-end">
- <a href="{{ route('products.index') }}" class="btn 
+ <a href="{{ route('products.index') }}" class="btn
 btn-primary btn-sm">&larr; Back</a>
  </div>
  </div>
  <div class="card-body">
  <form action="{{ route('products.update', $product-
->id) }}" method="post">
+>id) }}" method="post" enctype="multipart/form-data">
  @csrf
 @method("PUT")
  <div class="mb-3 row">
  <label for="code" class="col-md-4 col-formlabel text-md-end text-start">Code</label>
  <div class="col-md-6">
- <input type="text" class="form-control 
-@error('code') is-invalid @enderror" id="code" name="code" value="{{ 
+ <input type="text" class="form-control
+@error('code') is-invalid @enderror" id="code" name="code" value="{{
 $product->code }}">
  @error('code')
- <span class="text-danger">{{ $message 
+ <span class="text-danger">{{ $message
 }}</span>
  @enderror
  </div>
@@ -37,11 +37,11 @@ $product->code }}">
  <div class="mb-3 row">
  <label for="name" class="col-md-4 col-formlabel text-md-end text-start">Name</label>
  <div class="col-md-6">
- <input type="text" class="form-control 
-@error('name') is-invalid @enderror" id="name" name="name" value="{{ 
+ <input type="text" class="form-control
+@error('name') is-invalid @enderror" id="name" name="name" value="{{
 $product->name }}">
  @error('name')
- <span class="text-danger">{{ $message 
+ <span class="text-danger">{{ $message
 }}</span>
  @enderror
  </div>
@@ -49,11 +49,11 @@ $product->name }}">
  <div class="mb-3 row">
  <label for="quantity" class="col-md-4 colform-label text-md-end text-start">Quantity</label>
  <div class="col-md-6">
- <input type="number" class="form-control 
+ <input type="number" class="form-control
 @error('quantity') is-invalid @enderror" id="quantity" name="quantity"
 value="{{ $product->quantity }}">
  @error('quantity')
- <span class="text-danger">{{ $message 
+ <span class="text-danger">{{ $message
 }}</span>
  @enderror
  </div>
@@ -65,7 +65,7 @@ value="{{ $product->quantity }}">
 class="form-control @error('price') is-invalid @enderror" id="price"
 name="price" value="{{ $product->price }}">
  @error('price')
- <span class="text-danger">{{ $message 
+ <span class="text-danger">{{ $message
 }}</span>
  @enderror
  </div>
@@ -73,13 +73,31 @@ name="price" value="{{ $product->price }}">
  <div class="mb-3 row">
  <label for="description" class="col-md-4 colform-label text-md-end text-start">Description</label>
  <div class="col-md-6">
- <textarea class="form-control 
+ <textarea class="form-control
 @error('description') is-invalid @enderror" id="description"
 name="description">{{ $product->description }}</textarea>
  @error('description')
- <span class="text-danger">{{ $message 
+ <span class="text-danger">{{ $message
 }}</span>
  @enderror
+ </div>
+ </div>
+ <div class="mb-3 row">
+ <label for="picture" class="col-md-4 colform-label text-md-end text-start">Picture</label>
+ <div class="col-md-6">
+ <input type="file" class="form-control
+@error('picture') is-invalid @enderror" id="picture" name="picture">
+ <small class="form-text text-muted">Allowed file types: JPG, PNG (max 2MB)</small>
+ @error('picture')
+ <span class="text-danger">{{ $message
+}}</span>
+ @enderror
+ @if($product->picture)
+ <div class="mt-2">
+ <img src="{{ asset('storage/'.$product->picture) }}" alt="{{ $product->name }}" style="max-height: 100px; max-width: 100%;" class="img-thumbnail">
+ <p class="text-muted">Current image</p>
+ </div>
+ @endif
  </div>
  </div>
 <div class="mb-3 row">
@@ -88,7 +106,7 @@ name="description">{{ $product->description }}</textarea>
  </form>
  </div>
  </div>
- </div> 
+ </div>
 </div>
- 
+
 @endsection

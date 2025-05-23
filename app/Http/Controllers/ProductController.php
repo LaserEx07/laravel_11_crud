@@ -8,6 +8,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -21,7 +22,7 @@ class ProductController extends Controller
         return view('products.index', [
             'products' => Product::latest()->paginate(4)
             ]);
-           
+
     }
 
     /**
@@ -37,13 +38,18 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request): RedirectResponse
     {
-        Product::create($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('products', 'public');
+            $validated['picture'] = $picturePath;
+        }
+
+        Product::create($validated);
         return redirect()->route('products.index')
         ->withSuccess('New product is added successfully.');
-       
-
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -67,7 +73,19 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('picture')) {
+            // Delete old picture if exists
+            if ($product->picture) {
+                Storage::disk('public')->delete($product->picture);
+            }
+
+            $picturePath = $request->file('picture')->store('products', 'public');
+            $validated['picture'] = $picturePath;
+        }
+
+        $product->update($validated);
         return redirect()->back()
         ->withSuccess('Product is updated successfully.');
     }
@@ -76,8 +94,13 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
+        // Delete the product image if it exists
+        if ($product->picture) {
+            Storage::disk('public')->delete($product->picture);
+        }
+
         $product->delete();
- return redirect()->route('products.index')
- ->withSuccess('Product is deleted successfully.');
+        return redirect()->route('products.index')
+        ->withSuccess('Product is deleted successfully.');
     }
 }
