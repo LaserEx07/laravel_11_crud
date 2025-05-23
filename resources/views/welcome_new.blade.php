@@ -7,15 +7,15 @@
             <div class="card-header">Welcome to Laravel 11 CRUD Application</div>
             <div class="card-body">
                 <h5 class="card-title">Product Management System</h5>
-                <p class="card-text">This is a simple CRUD application built with Laravel 11.</p>
+                
                 
                 @guest
                     <div class="mt-4">
                         <p>Please login or register to access the products management system.</p>
-                        <div class="d-flex gap-2">
+                        <center><div class="d-flex gap-2" style="align-items: center">
                             <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
                             <a href="{{ route('register') }}" class="btn btn-outline-primary">Register</a>
-                        </div>
+                        </div></center>
                     </div>
                 @else
                     <div class="mt-4">
