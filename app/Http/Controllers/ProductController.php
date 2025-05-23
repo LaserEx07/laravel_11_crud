@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateProductRequest;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -20,7 +21,7 @@ class ProductController extends Controller
     public function index() : View
     {
         return view('products.index', [
-            'products' => Product::latest()->paginate(4)
+            'products' => Auth::user()->products()->latest()->paginate(4)
             ]);
 
     }
@@ -39,6 +40,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('picture')) {
             $picturePath = $request->file('picture')->store('products', 'public');
@@ -56,6 +58,11 @@ class ProductController extends Controller
      */
     public function show(Product $product): View
     {
+        // Ensure user can only view their own products
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('products.show', compact('product'));
 
     }
@@ -65,6 +72,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
+        // Ensure user can only edit their own products
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('products.edit', compact('product'));
     }
 
@@ -73,6 +85,11 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
+        // Ensure user can only update their own products
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validated();
 
         if ($request->hasFile('picture')) {
@@ -94,6 +111,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
+        // Ensure user can only delete their own products
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         // Delete the product image if it exists
         if ($product->picture) {
             Storage::disk('public')->delete($product->picture);
